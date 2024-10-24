@@ -1,3 +1,18 @@
+; ==========================
+; Group member 01: Name_Surname_student-nr
+; Group member 02: Name_Surname_student-nr
+; Group member 03: Name_Surname_student-nr
+; Group member 04: Name_Surname_student-nr
+; Group member 05: Name_Surname_student-nr
+; ==========================
+
+extern malloc
+
+section .text
+    global readPPM
+
+readPPM:
+
 section .data
     mode_str db "r", 0              ; Mode for fopen
     header_fmt db "%s %d %d %d", 0  ; Format string for parsing PPM header
