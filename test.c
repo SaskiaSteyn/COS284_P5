@@ -57,7 +57,6 @@ void writeCDF(PixelNode* head) {
         head = head->down;
     }
 }
-
 int main() {
     const char* inputFilename = "image01.ppm";
     const char* outputFilename = "output.ppm";
