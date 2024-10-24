@@ -20,10 +20,43 @@ typedef struct PixelNode {
     struct PixelNode* right;
 } PixelNode;
 
-extern PixelNode* readPPM(const char* filename); 
-extern void computeCDFValues(PixelNode* head);
+//extern PixelNode* readPPM(const char* filename); 
+/*extern void computeCDFValues(PixelNode* head);
 extern void applyHistogramEqualization(PixelNode* head);
 extern void writePPM(const char* filename, const PixelNode* head);
+*/
+void writeRGB(PixelNode* head) {
+    if (head == NULL)
+        return;
+
+    while(head != NULL) {
+        PixelNode* curr = head;
+        while(curr != NULL) {
+            printf(curr->Red);
+            printf(curr->Green);
+            printf(curr->Blue);
+            printf(" ");
+            curr = curr->right;
+        }
+        printf("\n");
+        head = head->down;
+    }
+}
+void writeCDF(PixelNode* head) {
+    if (head == NULL)
+        return;
+
+    while(head != NULL) {
+        PixelNode* curr = head;
+        while(curr != NULL) {
+            printf(curr->CdfValue);
+            printf(" ");
+            curr = curr->right;
+        }
+        printf("\n");
+        head = head->down;
+    }
+}
 
 int main() {
     const char* inputFilename = "image01.ppm";
@@ -34,12 +67,15 @@ int main() {
         fprintf(stderr, "Failed to read the image.\n");
         return 1;
     }
-
-    computeCDFValues(head);
+    writeRGB(head); // output for testing
+    writeCDF(head);
+    /*computeCDFValues(head);
+    writeCDF(head); // output for testing
 
     applyHistogramEqualization(head);
+    writeCDF(head); // output for testing
 
-    writePPM(outputFilename, head);
+    writePPM(outputFilename, head);*/
 
     return 0;
 }
