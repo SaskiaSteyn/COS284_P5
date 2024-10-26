@@ -1,29 +1,31 @@
-; ==========================
-; Group member 01: Name_Surname_student-nr
-; Group member 02: Name_Surname_student-nr
-; Group member 03: Name_Surname_student-nr
-; Group member 04: Name_Surname_student-nr
-; Group member 05: Name_Surname_student-nr
-; ==========================
-
-extern malloc
-
-section .text
-    global readPPM
-
-readPPM:
-
 section .data
     mode_str db "r", 0              ; Mode for fopen
     header_fmt db "%s %d %d %d", 0  ; Format string for parsing PPM header
     file_error db "Error opening file", 0
-
+    
 section .bss
     width resd 1                    ; Reserve space for image width
     height resd 1                   ; Reserve space for image height
     maxval resd 1                   ; Reserve space for max color value
     magic resb 3                    ; Reserve space for magic number (e.g., P6)
+    map_size resd 1
+    width_position resd 1
+    height_position resd 1
 
+    prev_head resq 1 ; used for double linking in vertical arrangement - store previous row head during the linking loop
+    curr resq 1 ; use as new head
+    prev_node resq 1 ; for horizontal link
+    
+    struc Pixel
+        red resd 1
+        green resd 1
+        blue resd 1
+        cdf resd 1
+        up resq 1
+        down resq 1
+        left resq 1
+        right resq 1
+    endstruc
 section .text
     global readPPM
     extern fopen, fscanf, malloc, fclose, fread
@@ -54,12 +56,14 @@ readPPM:
     cmp rax, 4
     jne .error
 
-    ; Calculate pixel count (width * height * 3 for RGB)
+    ; Calculate size to read (width * 3') * height for RGB
     mov eax, [width]
-    imul eax, [height]              ; width * height
-    imul eax, 3                     ; Multiply by 3 (RGB)
-    mov rdx, rax                    ;Total pixel count expect 3275520
+    imul eax, 3                     ; multiply width by 3 (RGB) - 3 chars to read per pixel
+    imul eax, [height]              ; multiply by height
 
+    mov rdx, rax                    ;Total pixel char count expect 3275520
+    ; each pixel has rgb
+    
     ; Allocate memory for pixel data
     mov rdi, rax                    ; Number of bytes to allocate
     push rdx
@@ -80,7 +84,7 @@ readPPM:
     call fread                      ; Call fread(buf, size, count, fp)
     add rsp, 8                      ; Restore stack alignment
     
-.tmp:
+.tmp: ; i would change this
     cmp rax, rax
     jl .error
 
@@ -90,6 +94,24 @@ readPPM:
     add rsp, 40                     ; Restore stack
     ret
 
+finish_loop:
+call fclose                     ; Close the file
+    add rsp, 40                     ; Restore stack
+    ret
+loop_rows: ; read lines 
+cmp height_position, [height]
+je finish_loop
+
+
+loop_cols: ; logic to read characters
+cmp [width], width_position
+je loop_rows
+; read here
+jmp loop_cols ; return to loop
+
+check_char: ; used everywhere - I believe the lines might not follow the exact dimensions in the header 
+; check for \n
+join_horizontal: ; join nodes horizontally - call after creation
 .error:
     mov rax, 0                      ; Return null in case of error
     add rsp, 40                     ; Restore stack

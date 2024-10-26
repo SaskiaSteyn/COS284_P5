@@ -25,6 +25,8 @@ typedef struct PixelNode {
 extern void applyHistogramEqualization(PixelNode* head);
 extern void writePPM(const char* filename, const PixelNode* head);
 */
+extern fopen, fread, fscanf, fclose;
+
 void writeRGB(PixelNode* head) {
     if (head == NULL)
         return;
@@ -56,6 +58,9 @@ void writeCDF(PixelNode* head) {
         printf("\n");
         head = head->down;
     }
+}
+PixelNode* readFile() {
+
 }
 int main() {
     const char* inputFilename = "image01.ppm";
