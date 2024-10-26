@@ -21,17 +21,11 @@ typedef struct PixelNode {
 } PixelNode;
 
 extern PixelNode* readPPM(const char* filename); 
-<<<<<<< Updated upstream
-extern void computeCDFValues(PixelNode* head);
-extern void applyHistogramEqualization(PixelNode* head);
-extern void writePPM(const char* filename, const PixelNode* head);
-=======
 /*extern void computeCDFValues(PixelNode* head);
 extern void applyHistogramEqualization(PixelNode* head);
 extern void writePPM(const char* filename, const PixelNode* head);
 */
 // extern fopen, fread, fscanf, fclose;
->>>>>>> Stashed changes
 
 int main() {
     const char* inputFilename = "image01.ppm";
@@ -43,11 +37,11 @@ int main() {
         return 1;
     }
 
-    computeCDFValues(head);
+    // computeCDFValues(head);
 
-    applyHistogramEqualization(head);
+    // applyHistogramEqualization(head);
 
-    writePPM(outputFilename, head);
+    // writePPM(outputFilename, head);
 
     return 0;
 }
