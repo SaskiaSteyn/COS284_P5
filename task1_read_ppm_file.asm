@@ -9,6 +9,10 @@ section .data
     mode_str db "r", 0              ; Mode for fopen
     header_fmt db "%s %d %d %d", 0  ; Format string for parsing PPM header
     pixel_node_size equ 32  ; 4 bytes for RGB and CDF + 4 pointers (8 bytes each)
+<<<<<<< Updated upstream
+=======
+    tmp dd 0
+>>>>>>> Stashed changes
 
 section .bss
     width resd 1                    ; Reserve space for image width
@@ -64,6 +68,7 @@ readPPM:
     jz .error
 
     ; Read pixel data
+<<<<<<< Updated upstream
     mov rdi, rax                    ; Buffer pointer (1st argument to fread)
     mov rsi, 1                      ; size of each item
     mov rcx, rbx                    ; Set number of elements to read 
@@ -77,11 +82,29 @@ readPPM:
     cmp rax, rdx                    ; Check if all pixel data was read
     jl .error
 
+=======
+    mov rdi, rax                    ; Ptr
+    mov rsi, 1                      ; size 
+    ; rdx is holding the count already
+    mov rcx, rbx                    ; rbx holds file
+    ; sub rsp, 8                      ; Align stack before call
+    push rdx
+    call fread                      ; Call fread(buf, size, count, fp)
+    pop rdx
+    ; add rsp, 8                      ; Restore stack alignment
+    
+    cmp rax, rdx                   ; Check if all pixel data was read
+    jl .error
+
+    mov rax, rdi
+
+>>>>>>> Stashed changes
 .build_list:
     ; ------------------
     ; Now build the list
     lea r10, [rax]                  ; r10 points to the pixel data
     ; mov r11, rdx                    ; r11 has pixel count (r*3*h)
+<<<<<<< Updated upstream
     xor rcx, rcx
     mov r12, [width]                ; width 
     mov r13, [height]                ; height
@@ -104,6 +127,42 @@ readPPM:
     mov r11, r14
     imul r11, 3
     imul r11, r12
+=======
+    xor r15, r15
+    push rax
+    mov r12, [width]                ; width 
+    mov eax, r12d
+    mov r12, rax                ; width 
+    mov r13, [height]                ; height
+    mov eax, r13d
+    mov r13, rax                ; height 
+    pop rax
+    mov r15, r12
+    mov r14, r13
+
+.outer_loop: ;loop through width
+    cmp r15, 0
+    je .end_loop
+    xor r14, r14
+
+.inner_loop:    ;loop through height
+    cmp r14, 0    
+    je .end_inner_loop
+
+    ; Calculate offset for pixel    
+    ; curr_width*width + curr_height
+    xor rdx, rdx
+    mov rdx, r15
+    ; imul rdx, 3
+    imul rdx, r12
+    mov r11, rdx
+    
+    xor rdx, rdx
+    mov rdx, r14
+    ; imul rdx, 3
+    ; imul rdx, r13
+
+>>>>>>> Stashed changes
     add rdx, r11
     xor r11, r11
 
@@ -113,6 +172,7 @@ readPPM:
     movzx rdx, byte [r8 + 2]        ; Load Blue value
     xor r8, r8 
 
+<<<<<<< Updated upstream
     ; Call insert_pixel_node
     push r10
     push r12
@@ -124,22 +184,72 @@ readPPM:
 
     pop r14
     pop rcx
+=======
+    push r10
+    push r12
+    push r13
+    push r14
+    push r15
+    push rax
+
+    ; Parameters: r (rdi), g (rsi), b (rdx), cdf ()
+    ; Allocate space for a new PixelNode
+    sub rsp, pixel_node_size
+
+    ; Store the RGB values and CDF value
+    mov [rsp], dil         ; Red
+    mov [rsp + 1], sil     ; Green
+    mov [rsp + 2], dl      ; Blue
+    mov byte [rsp + 3], 0
+    ; mov [rsp + 3], byte [0]      ; CDF Value
+
+    ; Initialize adjacent pointers to NULL
+    ; mov rax, 0
+    ; mov [rsp + 4], rax     ; up
+    ; mov [rsp + 12], rax    ; down
+    ; mov [rsp + 20], rax     ; left
+    ; mov [rsp + 28], rax     ; right
+
+    ; Set the new node's down pointer to the current head (if needed)
+    ; mov rax, [head]
+    ; mov [rsp + 12], rax    ; down pointer
+
+    ; ; Update head to point to the new node
+    ; mov [head], rsp        ; Update head
+
+    ; Clean up stack
+    add rsp, pixel_node_size
+
+    pop rax
+    pop r15
+    pop r14
+>>>>>>> Stashed changes
     pop r13
     pop r12
     pop r10
 
+<<<<<<< Updated upstream
     inc r14                          ; Decrement height counter
+=======
+    ; ret
+
+    dec r14                         ; inc height counter
+>>>>>>> Stashed changes
     jmp .inner_loop
 
 .end_inner_loop:
 
+<<<<<<< Updated upstream
     inc rcx                          ; inc width counter
+=======
+    dec r15                         ; inc width counter
+>>>>>>> Stashed changes
     jmp .outer_loop                  
 
 .end_loop:
 
     ; Clean up and return
-    call fclose                     ; Close the file
+    ;call fclose                     ; Close the file
     add rsp, 40                     ; Restore stack
     ret
 
@@ -148,6 +258,7 @@ readPPM:
     add rsp, 40                     ; Restore stack
     ret
 
+<<<<<<< Updated upstream
 insert_pixel_node:
     ; Parameters: r (rdi), g (rsi), b (rdx), cdf (rcx)
     ; Parameters: r (rdi), g (rsi), b (rdx), cdf (r13)
@@ -177,3 +288,12 @@ insert_pixel_node:
     ; Clean up stack
     add rsp, pixel_node_size
     ret
+=======
+
+; 7884y529857
+; 4395937y529
+; 97498279482
+
+; 1,0
+; 7884y529857 4395937y529 97498279482
+>>>>>>> Stashed changes
