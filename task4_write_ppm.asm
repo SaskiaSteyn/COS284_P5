@@ -1,9 +1,9 @@
 ; ==========================
-; Group member 01: Name_Surname_student-nr
-; Group member 02: Name_Surname_student-nr
-; Group member 03: Name_Surname_student-nr
-; Group member 04: Name_Surname_student-nr
-; Group member 05: Name_Surname_student-nr
+; Group member 01: Saskia_Steyn_17267162
+; Group member 02: Amadeus_Fidos_22526162
+; Group member 03: Rorisang_Manamela_21428574
+; Group member 05: Patterson_Rainbird-Webb_17104361
+; Group member 04: Nicolaas_Johan_Jansen_van_Rensburg_22590732
 ; ==========================
 
 section .text

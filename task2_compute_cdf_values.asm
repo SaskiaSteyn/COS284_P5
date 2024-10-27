@@ -1,3 +1,11 @@
+; ==========================
+; Group member 01: Saskia_Steyn_17267162
+; Group member 02: Amadeus_Fidos_22526162
+; Group member 03: Rorisang_Manamela_21428574
+; Group member 05: Patterson_Rainbird-Webb_17104361
+; Group member 04: Nicolaas_Johan_Jansen_van_Rensburg_22590732
+; ==========================
+
 section .bss
     histogram resb 256            ; Reserve space for histogram
     cumulativeHistogram resb 256   ; Reserve space for cumulative histogram
