@@ -135,7 +135,7 @@ store_value:
     mov rax, totalPixels
     inc rax
     mov [totalPixels], rax
-    jmp second_pass               ; Repeat
+    jmp second_pass               ; Iterate
 
 done:
     ret

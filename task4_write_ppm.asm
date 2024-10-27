@@ -24,8 +24,8 @@ writePPM:
 
 
     mov rdi, [rdi]                      ; Load head of linked list (PixelNode* head) - (Input 2)
-    cmp rdi, 0                          ; Check if the node is NULL
-    je  compute_cdf                     ; Jump to CDF computation if NULL
+    cmp rdi, 0                          ; Check if node == null
+    je  compute_cdf                     ; Jump to CDF computation == null
 
 
 .error:

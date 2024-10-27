@@ -12,10 +12,10 @@ section .data
     file_error db "Error opening file", 0
     
 section .bss
-    width resd 1                    ; Reserve space for image width
-    height resd 1                   ; Reserve space for image height
-    maxval resd 1                   ; Reserve space for max color value
-    magic resb 3                    ; Reserve space for magic number (e.g., P6)
+    width resd 1                    ; space for image width
+    height resd 1                   ; space for image height
+    maxval resd 1                   ; space for max color value
+    magic resb 3                    ; space for magic number (e.g., P6)
     map_size resd 1
     width_position resd 1
     height_position resd 1
@@ -40,7 +40,7 @@ section .text
     extern fopen, fscanf, malloc, fclose, fread
 
 readPPM:
-    sub rsp, 40                     ; Allocate space on the stack
+    sub rsp, 40                     ; space on the stack
 
     ; Open the file for reading
     mov rdi, rdi
@@ -70,11 +70,11 @@ readPPM:
     imul eax, 3                     ; multiply width by 3 (RGB) - 3 chars to read per pixel
     imul eax, [height]              ; multiply by height
 
-    mov rdx, rax                    ;Total pixel char count expect 3275520
+    mov rdx, rax                    ;total pixel char count expect is 3275520
     ; each pixel has rgb
     
     ; Allocate memory for pixel data
-    mov rdi, rax                    ; Number of bytes to allocate
+    mov rdi, rax                    ; num bytes to allocate
     push rdx
     push rbx
     call malloc
